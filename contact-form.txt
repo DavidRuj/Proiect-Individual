@@ -1,0 +1,12 @@
+
+--==Client==--
+Nume: david
+Numar de telefon: 031237
+Email: rdasd@dasd
+Mesaj: sdaijds
+
+--==Client==--
+Nume: 
+Numar de telefon: 
+Email: rujescu@dasd
+Mesaj: 

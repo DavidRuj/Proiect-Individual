@@ -22,35 +22,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $parola = password_hash($_POST["parola"], PASSWORD_DEFAULT);
 
         // Inserare utilizator în baza de date
-        $sql = "INSERT INTO utilizatori (Nume, Prenume, Email, Parola) VALUES ('$nume', '$prenume', '$email', '$parola')";
+        $sql = "INSERT INTO Utilizatori (Nume, Prenume, Email, Parola) VALUES ('$nume', '$prenume', '$email', '$parola')";
 
         if ($conn->query($sql) === TRUE) {
             header("location: login.php");
         } else {
             echo "Eroare la înregistrare: " . $conn->error;
         }
-    } elseif (isset($_POST["login"])) {
-        // Procesare formular de login
-        $email = $_POST["email"];
-        $parola = $_POST["parola"];
-
-        // Verificare credențiale în baza de date
-        $sql = "SELECT * FROM Utilizatori WHERE Email = '$email'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if (password_verify($parola, $row["Parola"])) {
-                header("location: index.php");
-            } else {
-                header("location: login_pass_err.php");
-
-            }
-        } else {
-            header("location: login_err.php");
-
-        }
-    }
+    } 
+    
 }
 
 $conn->close();
@@ -124,47 +104,61 @@ $conn->close();
       background: transparent;
       border: none;
       outline: none;
-      color: #fc5d35;
+      color: #fff;
       background: #227be3;
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
     }
     .box input[type="submit"]:hover {
-      background-color: #fc5d35;
+      background-color: #3067b9;
     }
   </style>
-  <title>Login</title>
+  <title>Inregistrare</title>
 </head>
+<body>
+
+
 <body>
 <div class="box">
 
     <form method="post" action="">
-    <h2>Login</h2>
+    <h2>Înregistrare</h2>
+
       <div class="input-box">
-        <input type="email" name="email" id="loginEmail" autocomplete="on" required>
-        <label for="loginEmail">Email: </label>
+        <input type="text" name="nume" id="nume" autocomplete="off" required>
+        <label for="nume">Nume: </label>
       </div>
 
       <div class="input-box d-flex">
-        <input type="password" name="parola" id="loginParola" autocomplete="off" required>
-        <label for="loginParola">Parola: </label>
+        <input type="text" name="prenume" id="prenume" autocomplete="off" required>
+        <label for="prenume">Prenume: </label>
+      </div>
+
+
+      <div class="input-box d-flex">
+        <input type="email" name="email" id="email" autocomplete="off" required>
+        <label for="email">Email: </label>
+      </div>
+
+      <div class="input-box d-flex">
+        <input type="password" name="parola" id="parola" autocomplete="off" required>
+        <label for="parola">Parola: </label>
       </div>
 
       <h2>
-      <button type="submit" name="login">
+      <button type="submit" name="register">
       <a class="text-uppercase custom_orange-btn mr-3">
-                Login
+                Înregistreaza-te!
       </a>
       </button>
-    <br>
-    </br>
-    
-    <a href="register.php" class="text-uppercase mr-3">
-                Register
-    </a>     
-  </h2>
-  </form>
+      <br>
+      </br>
 
+      <a href="login.php" class="text-uppercase mr-3">
+                Login
+      </a> 
+  </h2>
+    </form>
 </body>
 </html>

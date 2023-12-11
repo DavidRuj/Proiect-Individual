@@ -1,3 +1,34 @@
+<?php
+// Conectare la baza de date
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "proiect";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificare conexiune
+if ($conn->connect_error) {
+    die("Conexiune esuata: " . $conn->connect_error);
+}
+
+// Procesare formular
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send"])) {
+  // Obține datele din formular
+  $email = $_POST["email"];
+
+  // Inserare date în baza de date
+  $sql = "INSERT INTO abonari (Email) VALUES ('$email')";
+
+  if ($conn->query($sql) === TRUE) {
+  } else {
+      echo "Eroare la adăugarea datelor: " . $conn->error;
+  }
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -59,6 +90,9 @@
                 </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="cart.php">Coș </a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="login.php">Logare </a>
                 </li>
               </ul>
             </div>
@@ -143,61 +177,52 @@
   
     <!-- end service section -->
 
-    <br>
-    </br>
-    <section>
-      <div class="row layout_padding2">
-        <div class="col-md-8">
-          <div class="fruit_detail-box">
-            <h3>
-              Portocale Proaspete
-            </h3>
-            <p class="mt-4 mb-5">
-            Sursă de Energie Naturală: Portocalele sunt bogate în vitamina C și nutrienți esențiali, contribuind la întărirea sistemului imunitar și la menținerea unei stări de sănătate optime.
-            </p>
-            <div>
-              <a href="" class="custom_dark-btn">
-                Cumpără
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-center align-items-center">
-          <div class="fruit_img-box d-flex justify-content-center align-items-center">
-            <img src="images/orange.png" alt="" class="" width="250px" />
-          </div>
-        </div>
-      </div>
+    <?php
+// Conectare la baza de date (actualizează cu detaliile tale)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "proiect";
 
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-        <div class="row layout_padding2-top layout_padding-bottom">
-          <div class="col-md-8">
-            <div class="fruit_detail-box">
-              <h3>
-                Lămâi
-              </h3>
-              <p class="mt-4 mb-5">
-              Descoperiți plăcerea autentică a lămâilor proaspete, oferindu-vă o explozie răcoritoare de gust și vitalitate. Fiecare lămâie pe care o oferim este aleasă cu atenție din livezi cultivate cu pasiune și respect pentru calitate, pentru a vă aduce o experiență citrică de neuitat.
-              </p>
-              <div>
-                <a href="" class="custom_dark-btn">
-                  Cumpără
-                </a>
-              </div>
-            </div>
-          </div>
-        <div class="col-md-4 d-flex justify-content-center align-items-center">
-          <div class="fruit_img-box d-flex justify-content-center align-items-center">
-            <img src="images/lemons.png" alt="" class="" width="225px" />
-          </div>
-        </div>
-        </div>
+// Verifică dacă conectarea a fost realizată cu succes
+if ($conn->connect_error) {
+    die("Conexiunea la baza de date a eșuat: " . $conn->connect_error);
+}
 
+// Interogare pentru a selecta toate produsele din tabelul StocMagazin
+$sql = "SELECT id_produs, denumire, descriere, pret, imagine FROM StocCitrice";
+$result = $conn->query($sql);
 
-      </div>
+// Verifică dacă există rezultate
+if ($result->num_rows > 0) {
+    // Afișează datele într-un mod dorit
+    while ($row = $result->fetch_assoc()) {
+        echo '<div class="row layout_padding2-top layout_padding-bottom">';
+        echo '<div class="col-md-8">';
+        echo '<div class="fruit_detail-box">';
+        echo '<h3>' . $row['denumire'] . " - " .  $row['pret'] . " lei"  .'</h3>';
+        echo '<p class="mt-4 mb-5">' . $row['descriere'] . '</p>';
+        echo '<div>';
+        echo '<a href="" class="custom_dark-btn">Cumpără</a>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '<div class="col-md-4 d-flex justify-content-center align-items-center">';
+        echo '<div class="fruit_img-box d-flex justify-content-center align-items-center">';
+        echo '<img src="' . $row['imagine'] . '" alt="" class="" width="250px" />';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+} else {
+    echo "Nu există produse în baza de date.";
+}
 
-
-    </section>
+// Închide conexiunea la baza de date
+$conn->close();
+?>
 
   <!-- end fruits section -->
 
@@ -272,14 +297,14 @@
             <h5>
             Abonează-te acum!
             </h5>
+            <form method="post" action="">
             <div class="form_container">
-            <form action="abonati-form.php">
                  <input type="email" name="email"  autocomplete="off" required placeholder="john.doe@e-uvt.ro">
-                <button type="submit">
+                <button type="submit" name="send">
                   Trimite!
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

@@ -1,3 +1,34 @@
+<?php
+// Conectare la baza de date
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "proiect";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificare conexiune
+if ($conn->connect_error) {
+    die("Conexiune esuata: " . $conn->connect_error);
+}
+
+// Procesare formular
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send"])) {
+  // Obține datele din formular
+  $email = $_POST["email"];
+
+  // Inserare date în baza de date
+  $sql = "INSERT INTO abonari (Email) VALUES ('$email')";
+
+  if ($conn->query($sql) === TRUE) {
+  } else {
+      echo "Eroare la adăugarea datelor: " . $conn->error;
+  }
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -59,6 +90,9 @@
                 </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="cart.php">Coș </a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="login.php">Logare </a>
                 </li>
               </ul>
               
@@ -163,14 +197,14 @@
             <h5>
               Abonează-te acum!
             </h5>
+            <form method="post" action="">
             <div class="form_container">
-              <form action="abonati-form.php">
                  <input type="email" name="email"  autocomplete="off" required placeholder="john.doe@e-uvt.ro">
-                <button type="submit">
+                <button type="submit" name="send">
                   Trimite!
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

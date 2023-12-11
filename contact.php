@@ -1,3 +1,51 @@
+<?php
+// Conectare la baza de date
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "proiect";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificare conexiune
+if ($conn->connect_error) {
+    die("Conexiune esuata: " . $conn->connect_error);
+}
+
+// Procesare formular
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send"])) {
+  // Obține datele din formular
+  $email = $_POST["email"];
+
+  // Inserare date în baza de date
+  $sql = "INSERT INTO abonari (Email) VALUES ('$email')";
+  if ($conn->query($sql) === TRUE) {
+  } else {
+      echo "Eroare la adăugarea datelor: " . $conn->error;
+  }
+}
+
+// Procesare formular
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
+  // Obține datele din formular
+  $nume = $_POST["nume"];
+  $numarTelefon = $_POST["numar_telefon"];
+  $email = $_POST["email"];
+  $mesaj = $_POST["mesaj"];
+
+  // Inserare date în baza de date
+  $sql = "INSERT INTO Contacte (Nume, NumarTelefon, Email, Mesaj) VALUES ('$nume', '$numarTelefon', '$email', '$mesaj')";
+
+  if ($conn->query($sql) === TRUE) {
+  } else {
+      echo "Eroare la adăugarea datelor: " . $conn->error;
+  }
+}
+
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -60,6 +108,9 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="cart.php">Coș </a>
                 </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="login.php">Logare </a>
+                </li>
               </ul>
             </div>
             <div class="quote_btn-container ml-0 ml-lg-4 d-flex justify-content-center">
@@ -89,26 +140,27 @@
       </br>
       <div class="row">
         <div class="col-md-8 mr-auto">
-          <form action="contact-form.php">
+          <form method="post"  action="">
             <div class="contact_form-container">
               <div>
+
                 <div>
-                <input type="nume" name="nume"  autocomplete="off" required placeholder="Nume">
+                  <input type="nume" name="nume"  autocomplete="off" required placeholder="Nume">
                 </div>
                 <div>
-                <input type="numar" name="numar"  autocomplete="off" required placeholder="Numar de telefon">
+                  <input type="numar" name="numar_telefon"  autocomplete="off" required placeholder="Numar de telefon">
                 </div>
                 <div>
-                <input type="email" name="email"  autocomplete="off" required placeholder="Email">
+                  <input type="email" name="email"  autocomplete="off" required placeholder="Email">
                 </div>
                 <div>
-                <input type="mesaj" name="mesaj"  autocomplete="off" required placeholder="Mesaj">
+                  <input type="mesaj" name="mesaj"  autocomplete="off" required placeholder="Mesaj">
                 </div>
                
                 <div class="mt-5">
-                <br>
-      </br>
-                  <button type="submit">
+                 <br>
+                 </br>
+                  <button type="submit" name="register">
                     Trimite!
                   </button>
                 </div>
@@ -193,14 +245,14 @@
             <h5>
               Abonează-te acum!
             </h5>
+            <form method="post" action="">
             <div class="form_container">
-            <form action="abonati-form.php">
                  <input type="email" name="email"  autocomplete="off" required placeholder="john.doe@e-uvt.ro">
-                <button type="submit">
+                <button type="submit" name="send">
                   Trimite!
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
